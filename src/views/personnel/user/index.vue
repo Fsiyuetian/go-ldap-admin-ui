@@ -109,7 +109,7 @@
           <el-row>
             <el-col :span="12">
               <el-form-item label="用户名" prop="username">
-                <el-input ref="password" v-model.trim="dialogFormData.username" :disabled="disabled" placeholder="用户名（拼音）" />
+                <el-input ref="password" v-model.trim="dialogFormData.username" :disabled="disabled" placeholder="用户名（大写工号）" />
               </el-form-item>
             </el-col>
             <el-col :span="12">
@@ -163,7 +163,7 @@
             </el-col>
             <el-col :span="12">
               <el-form-item label="工号" prop="jobNumber">
-                <el-input v-model.trim="dialogFormData.jobNumber" placeholder="工号" />
+                <el-input v-model.trim="dialogFormData.jobNumber" :disabled="disabled" placeholder="工号" />
               </el-form-item>
             </el-col>
             <el-col :span="12">

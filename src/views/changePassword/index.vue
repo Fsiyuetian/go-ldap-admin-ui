@@ -4,7 +4,14 @@
       <el-form-item label="邮箱">
         <div class="input-container">
           <el-input v-model="form.mail" placeholder="请输入个人邮箱"></el-input>
-          <el-button type="primary" @click="sendEmailCode">发送验证码</el-button>
+          <el-button
+            type="primary"
+            @click="sendEmailCode"
+            :disabled="isSendingCode"
+            :loading="isSendingCode"
+          >
+            {{ isSendingCode ? `${countdown}秒后重试` : '发送验证码' }}
+          </el-button>
         </div>
       </el-form-item>
       <el-form-item label="验证码" class="code-item">
@@ -18,7 +25,7 @@
 </template>
 
 <script>
-import { emailPass,sendCode } from '@/api/system/user'
+import { emailPass, sendCode } from '@/api/system/user'
 import { Message } from 'element-ui'
 
 export default {
@@ -29,32 +36,63 @@ export default {
       form: {
         mail: "",
         code: ""
-      }
+      },
+      isSendingCode: false, // 控制按钮状态
+      countdown: 60 // 倒计时时间
     }
   },
   methods: {
     // 判断结果
-    judgeResult(res){
-      if (res.code==0){
-          Message({
-            showClose: true,
-            message: "操作成功",
-            type: 'success'
-          })
-        }
+    judgeResult(res) {
+      if (res.code === 0) {
+        Message({
+          showClose: true,
+          message: "操作成功",
+          type: 'success'
+        })
+      }
     },
 
     // 发送邮箱验证码
     async sendEmailCode() {
-      console.log('aaaaaaaa',this.form.mail);
+      console.log('aaaaaaaa', this.form.mail);
 
-      await sendCode({ mail: this.form.mail }).then(res =>{
-        this.judgeResult(res)
-      })
+      this.isSendingCode = true; // 禁用按钮
+      try {
+        const res = await sendCode({ mail: this.form.mail });
+        this.judgeResult(res);
+        Message({
+          showClose: true,
+          message: "发送验证码成功",
+          type: 'success'
+        });
+        this.startCountdown();
+      } catch (error) {
+        this.isSendingCode = false; // 恢复按钮状态
+        Message({
+          showClose: true,
+          message: "发送验证码失败",
+          type: 'error'
+        });
+      }
     },
+
+    // 开始倒计时
+    startCountdown() {
+      const timer = setInterval(() => {
+        if (this.countdown > 0) {
+          this.countdown--;
+        } else {
+          this.isSendingCode = false;
+          this.countdown = 60;
+          clearInterval(timer);
+        }
+      }, 1000);
+    },
+
     // 重置密码
     async resetPass() {
-      await emailPass(this.form).then(res =>{
+      await emailPass(this.form).then(res => {
         this.judgeResult(res)
       })
       // 重新登录

@@ -3,7 +3,7 @@
     <el-form ref="loginForm" :model="loginForm" :rules="loginRules" class="login-form" autocomplete="on" label-position="left">
 
       <div class="title-container">
-        <h3 class="title">Go-Ldap-Admin </h3>
+        <h3 class="title">您好，欢迎<span class="login-text">登录</span>LDAP </h3>
       </div>
 
       <el-form-item prop="username">
@@ -293,6 +293,9 @@ $light_gray:#eee;
       text-align: center;
       font-weight: bold;
       // letter-spacing: 2px;
+    }
+    .login-text {
+      color: #029ef7;
     }
   }
 
