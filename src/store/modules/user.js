@@ -8,7 +8,8 @@ const state = {
   name: '',
   avatar: '',
   introduction: '',
-  roles: []
+  roles: [],
+  nickname: '',
 }
 
 const mutations = {
@@ -26,14 +27,17 @@ const mutations = {
   },
   SET_ROLES: (state, roles) => {
     state.roles = roles
+  },
+  SET_NICKNAME: (state, nickname) => {
+    state.nickname = nickname;
   }
 }
 
 const actions = {
-  
+
   // user login
   login({ commit }, userInfo) {
-   
+
     const { username, password } = userInfo
     return new Promise((resolve, reject) => {
       login({ username: username.trim(), password: password }).then(response => {
@@ -59,7 +63,7 @@ const actions = {
         }
 
         const userInfo = data
-        const { roles, username, avatar, introduction } = userInfo
+        const { roles, username, avatar, introduction, nickname } = userInfo
         // roles must be a non-empty array
         if (!roles || roles.length <= 0) {
           reject('getInfo: roles must be a non-null array!')
@@ -70,6 +74,7 @@ const actions = {
         commit('SET_NAME', username)
         commit('SET_AVATAR', avatar)
         commit('SET_INTRODUCTION', introduction)
+        commit('SET_NICKNAME', nickname);
         resolve(userInfo)
       }).catch(error => {
         reject(error)
