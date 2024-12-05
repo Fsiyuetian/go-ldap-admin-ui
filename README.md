@@ -25,6 +25,7 @@ Fork time: 2024-12-02 16:00
 
 ## 构建dist.zip
 
+方式一：自动构建（github依赖包下不动）
 ```bash
 docker build -t ldap-admin-ui:v1 .
 docker run -d --name ldapui --privileged ldap-admin-ui:v1 && docker cp ldapui:/app ./
@@ -32,5 +33,14 @@ mv app dist
 zip -r dist.zip dist
 ```
 
+方式二：PC电脑手动构建（电脑使用代理，开始下载依赖）
+先安装nodejs，使用git bash客户端执行下面构建命令
+```bash
+npm install yarn
+sed -i 's@http://localhost:8888/@/@g' .env.production
+git config --global url."https://".insteadOf git://
+npm install --registry=http://registry.npmmirror.com
+yarn build:prod
+```
 
 <!-- readme: collaborators,contributors -end -->
