@@ -47,7 +47,8 @@ export default {
         name: this.name,
         role: this.roles.join(' | '),
         email: 'admin@test.com',
-        avatar: this.avatar
+        avatar: this.avatar,
+        nickname: this.nickname
       }
     }
   }
